@@ -4,7 +4,7 @@ const BASE_URL = "http://localhost:3001";
 export function fetchCountries() {
   return function (dispatch) {
     axios
-      .get(`${BASE_URL}/all`)
+      .get(`${BASE_URL}/api/all`)
       .then((response) => response.json())
       .then((countries) => {
         dispatch({
@@ -20,7 +20,7 @@ export function getCountry(name) {
     return fetch(`${BASE_URL}/${name}`)
       .then((response) => response.json())
       .then((detail) => {
-        dispatch({ type: "GET_COUNTRY", payload: detail });
+        dispatch({ type: "GET_COUNTRY", payload: detail.data });
       });
   };
 }

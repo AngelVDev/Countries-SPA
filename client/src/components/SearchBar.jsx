@@ -18,7 +18,7 @@ const SearchBar = () => {
     <div>
       <input
         type="text"
-        placeholder="Try searching a country, pal"
+        placeholder="Search smthng..."
         onChange={(e) => handleInputChange(e)}
       />
       <button type="submit" onClick={(e) => handleSubmit(e)}>

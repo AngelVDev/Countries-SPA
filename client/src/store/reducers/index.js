@@ -7,7 +7,7 @@ function rootReducer(state = initialState, action) {
   if (action.type === "FETCH_COUNTRIES") {
     return {
       ...state,
-      countriesList: action.payload.data,
+      countriesList: action.payload,
     };
   }
   if (action.type === "GET_COUNTRY") {
