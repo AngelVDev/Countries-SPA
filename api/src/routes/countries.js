@@ -4,19 +4,24 @@ const axios = require("axios");
 const router = Router();
 
 const getCountry = async () => {
-  const countryAPI = await axios.get("https://restcountries.com/v3.1/all");
-  const countryINFO = await countryAPI.data?.map((el) => {
-    return {
-      name: el.name,
-      flag: el.flag,
-      capital: el.capital,
-      subregion: el.subregion,
-      area: el.area,
-      population: el.population,
-    };
-  });
+  try {
+    const countryAPI = await axios.get("https://restcountries.com/v3.1/all");
+    const countryINFO = await countryAPI.data?.map((el) => {
+      return {
+        name: el.name,
+        flag: el.flag,
+        capital: el.capital,
+        subregion: el.subregion,
+        area: el.area,
+        population: el.population,
+      };
+    });
+  } catch (error) {
+    console.log(error);
+  }
   return countryINFO;
 };
+console.log(getCountry());
 
 const getDbCountries = async () => {
   return await Country.findAll({
@@ -47,6 +52,7 @@ router.get("/countries", async (req, res) => {
     res.status(200).send(countriesTotal);
   }
 });
+
 router.get("countries/:id", async (req, res) => {
   const id = req.params.id;
   const countriesTotal = await getAllCountries();
@@ -55,34 +61,6 @@ router.get("countries/:id", async (req, res) => {
     countryId.length
       ? res.status(200).send(countryId)
       : res.status(404).send("Can't find it");
-  }
-});
-
-router.post("/activity", async (req, res) => {
-  let activities = await getDbInfoActivities();
-  let { name, difficulty, duration, season, countries } = req.body;
-  if (name)
-    activities = activities.filter(
-      (el) => el.name.toLowerCase() === name.toLowerCase()
-    );
-  if (activities.length === 0) {
-    if (!name || !difficulty || !season || !duration || countries.length == 0)
-      res.status(404).send("Wow. So much empty fields");
-    else {
-      let activityCreated = await Activity.create({
-        name,
-        difficulty,
-        duration,
-        season,
-      });
-      let countryDb = await Country.findAll({
-        where: { name: countries },
-      });
-      activityCreated.addCountry(countryDb);
-      res.status(201).send("So much succesful creation");
-    }
-  } else {
-    res.status(404).send("Wow. So much empty fields");
   }
 });
 
