@@ -1,29 +1,32 @@
-const { Router } = require("express");
-const { Country, Activity } = require("../db");
-const axios = require("axios");
+const { Router } = require('express');
+const { Country, Activity } = require('../db');
+const axios = require('axios');
 const router = Router();
 
 const getCountry = async () => {
   try {
-    const countryAPI = await axios.get("https://restcountries.com/v3.1/all");
+    const countryAPI = await axios.get('https://restcountries.com/v3.1/all');
     const countryINFO = await countryAPI.data?.map((el) => {
       return {
         name: el.name,
-        flag: el.flag,
-        capital: el.capital,
+        id: el.cca3,
+        flag: el.flags[0] ? el.flags[0] : 'No flag',
+        continent: el.continents,
+        capital: el.capital ? el.capital : 'No capital',
         subregion: el.subregion,
         area: el.area,
         population: el.population,
       };
     });
+    return countryINFO;
   } catch (error) {
     console.log(error);
   }
-  return countryINFO;
 };
-console.log(getCountry());
 
 const getDbCountries = async () => {
+  let allDbCountries = await getCountry();
+  let { name } = req.query;
   return await Country.findAll({
     include: {
       model: Activity,
@@ -32,13 +35,13 @@ const getDbCountries = async () => {
 };
 
 const getAllCountries = async () => {
-  const apiINFO = await getCountry();
-  const dbINFO = await getDbCountries();
-  const TotalINFO = apiINFO.concat(dbINFO);
-  return TotalINFO;
+  let apiINFO = await getCountry();
+  let dbINFO = await getDbCountries();
+  let totalINFO = apiINFO.concat(dbINFO);
+  return totalINFO;
 };
 
-router.get("/countries", async (req, res) => {
+router.get('/countries', async (req, res) => {
   const name = req.query;
   let countriesTotal = await getAllCountries();
   if (name) {
@@ -47,13 +50,13 @@ router.get("/countries", async (req, res) => {
     );
     countryName.length
       ? res.status(200).send(countryName)
-      : res.status(404).send("Ask Joe");
+      : res.status(404).send('Ask Joe');
   } else {
     res.status(200).send(countriesTotal);
   }
 });
 
-router.get("countries/:id", async (req, res) => {
+router.get('countries/:id', async (req, res) => {
   const id = req.params.id;
   const countriesTotal = await getAllCountries();
   if (id) {
