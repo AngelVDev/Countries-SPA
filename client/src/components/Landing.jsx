@@ -1,12 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 export const Landing = () => {
   return (
     <div>
       <h1>Welcome to ZA WARUDO</h1>
-      <Link to="/">
+      <Link to="/home">
         <STYLO_BUTT>Start</STYLO_BUTT>
       </Link>
     </div>

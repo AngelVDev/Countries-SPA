@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getCountry } from "../store/actions/index";
+import styled from "styled-components";
 
 const SearchBar = () => {
   let dispatch = useDispatch();

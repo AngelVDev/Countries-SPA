@@ -1,18 +1,19 @@
-const { Router } = require('express');
-const { Country, Activity } = require('../db');
-const axios = require('axios');
+const { Router } = require("express");
+const { Country, Activity } = require("../db");
+const axios = require("axios");
+const { Sequelize } = require("sequelize");
 const router = Router();
 
 const getCountry = async () => {
   try {
-    const countryAPI = await axios.get('https://restcountries.com/v3.1/all');
+    const countryAPI = await axios.get("https://restcountries.com/v3.1/all");
     const countryINFO = await countryAPI.data?.map((country) => {
       return {
         name: country.name.common,
         id: country.cca3,
-        flag: country.flags[0] ? country.flags[0] : 'No flag',
-        continent: country.continents,
-        capital: country.capital /*? country.capital : 'No capital' */,
+        flags: country.flags[0] ? country.flags[0] : "No flag here",
+        continent: country.continents[0],
+        capital: country.capital != null ? country.capital : "No capital",
         subregion: country.subregion,
         area: country.area,
         population: country.population,
@@ -23,23 +24,47 @@ const getCountry = async () => {
     console.log(error);
   }
 };
-let pera = getCountry();
-console.log(pera);
 
-const getDbCountries = async () => {
+const getDbCountries = async (req, res) => {
+  let allDbCountries = await getCountry(); //la info de la API, mapeada
+  let { name } = req.query;
   try {
-    let allDbCountries = await getCountry();
-    return await Country.findAll({
+    let STORED = await Country.findAll({
       include: {
         model: Activity,
       },
     });
+    if (!STORED.length) {
+      //se supone que acá los debería estar pasando a la tabla
+      await Country.bulkCreate(allDbCountries);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  try {
+    if (name) {
+      let countryName = await Country.findAll({
+        where: {
+          name: {
+            [Sequelize.Op.iLike]: `%${name.toLowerCase()}`,
+          },
+        },
+      });
+      countryName.length
+        ? res.status(200).send(countryName)
+        : res.status(404).send("Can't find the country");
+    } else {
+      let STORED = await Country.findAll({
+        include: {
+          model: Activity,
+        },
+      });
+      res.status(200).send(STORED);
+    }
   } catch (error) {
     console.log(error);
   }
 };
-let papa = getDbCountries();
-console.log(papa);
 
 const getAllCountries = async () => {
   let apiINFO = await getCountry();
@@ -47,33 +72,32 @@ const getAllCountries = async () => {
   let totalINFO = apiINFO.concat(dbINFO);
   return totalINFO;
 };
-let zanahoria = getAllCountries();
-console.log(zanahoria);
 
-router.get('/countries', async () => {
-  const name = req.query;
+router.get("/countries", async () => {
+  const name = req.query.name;
   let countriesTotal = await getAllCountries();
-  console.log(countriesTotal);
   if (name) {
     let countryName = await countriesTotal.filter((e) =>
       e.name.toLowerCase().includes(name.toLowerCase())
     );
     countryName.length
       ? res.status(200).send(countryName)
-      : res.status(404).send('Nope');
+      : res.status(404).send("Nope");
   } else {
     res.status(200).send(countriesTotal);
   }
 });
 
-router.get('countries/:id', async () => {
+router.get("countries/:id", async () => {
   const id = req.params.id;
-  const countriesTotal = await getAllCountries();
   if (id) {
-    let countryId = await countriesTotal.filter((el) => el.id == id);
-    countryId.length
-      ? res.status(200).send(countryId)
-      : res.status(404).send("Can't find it");
+    let countryId = await await Country.findByPk(id.toUpperCase(), {
+      include: {
+        model: Activity,
+      },
+    });
+    res.status(200).send(countryId);
+    res.status(404).send("Can't find it");
   }
 });
 
