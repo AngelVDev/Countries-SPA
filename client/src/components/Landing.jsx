@@ -4,46 +4,56 @@ import styled from "styled-components";
 
 export const Landing = () => {
   return (
-    <div>
-      <h1>Welcome to ZA WARUDO</h1>
+    <DIV>
+      <h2>Welcome to THE WORLD</h2>
       <Link to="/home">
         <STYLO_BUTT>Start</STYLO_BUTT>
       </Link>
-    </div>
+    </DIV>
   );
 };
+export const DIV = styled.div`
+  /* align: center; */
+  font-family: "Garamond", serif;
+  font-smooth: subpixel-antialiased;
+  text-align: center;
+  color: white;
+  background: radial-gradient(#fed36d 0%, #e2b349 65%, #c38822 100%);
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+`;
 const STYLO_BUTT = styled.button`
-  color: whitesmoke;
-  background: #cb8282;
+  color: white;
+  position: absolute;
+  outline: none;
+  top: 80%;
+  left: 50%;
+  background: #64b534;
+  border-radius: 5px;
+  &:hover {
+    box-shadow: 0px 1px 35px 10px #fed36d;
+  }
   &:active {
     filter: hue-rotate(77deg);
   }
   &:focus {
-    animation: jello 700ms ease 0s 1 normal forwards;
+    animation: back 1350ms ease 0s 1 normal backwards;
   }
-  @keyframes jello {
+  @keyframes back {
     0% {
-      transform: scale3d(1, 1, 1);
+      opacity: 1;
+      transform: rotateX(0deg);
+      transform-origin: left;
     }
-    30% {
-      transform: scale3d(1.25, 0.75, 1);
-    }
-    40% {
-      transform: scale3d(0.75, 1.25, 1);
-    }
-    50% {
-      transform: scale3d(1.15, 0.85, 1);
-    }
-    65% {
-      transform: scale3d(0.95, 1.05, 1);
-    }
-    75% {
-      transform: scale3d(1.05, 0.95, 1);
-    }
+
     100% {
-      transform: scale3d(1, 1, 1);
+      opacity: 0;
+      transform: rotateX(-100deg);
+      transform-origin: left;
     }
   }
 `;
-
 export default Landing;

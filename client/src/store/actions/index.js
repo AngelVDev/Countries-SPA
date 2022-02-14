@@ -24,6 +24,19 @@ export function getCountry(name) {
       });
   };
 }
+export let getActivities = () => {
+  return async (dispatch) => {
+    try {
+      let activities = await axios.get("http://localhost:3001/activity");
+      return dispatch({
+        type: "GET_ACTIVITIES",
+        payload: activities.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 export let createActivity = (payload) => {
   return async (dispatch) => {
     try {
@@ -42,6 +55,42 @@ export let orderByName = (payload) => {
     try {
       return dispatch({
         type: "SORT_BY_NAME",
+        payload: payload,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export let orderByPopulation = (payload) => {
+  return async (dispatch) => {
+    try {
+      return dispatch({
+        type: "SORT_BY_POPULATION",
+        payload: payload,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export let filterContinent = (payload) => {
+  return async (dispatch) => {
+    try {
+      return dispatch({
+        type: "FILTER_CONTINENT",
+        payload: payload,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export let filterActivity = (payload) => {
+  return async (dispatch) => {
+    try {
+      return dispatch({
+        type: "FILTER_ACTIVITY",
         payload: payload,
       });
     } catch (error) {

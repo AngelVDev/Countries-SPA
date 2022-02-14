@@ -2,8 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getCountry } from "../store/actions/index";
-import styled from "styled-components";
-
+import { DIV } from "./Landing";
 const SearchBar = () => {
   let dispatch = useDispatch();
   let [name, setName] = useState("");
@@ -16,7 +15,7 @@ const SearchBar = () => {
     dispatch(getCountry(name));
   };
   return (
-    <div>
+    <DIV>
       <input
         type="text"
         placeholder="Search smthng..."
@@ -25,7 +24,7 @@ const SearchBar = () => {
       <button type="submit" onClick={(e) => handleSubmit(e)}>
         Search
       </button>
-    </div>
+    </DIV>
   );
 };
 export default SearchBar;
