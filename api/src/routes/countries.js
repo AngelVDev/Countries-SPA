@@ -7,7 +7,7 @@ const router = Router();
 const getCountry = async () => {
   try {
     const countryAPI = await axios.get("https://restcountries.com/v3.1/all");
-    const countryINFO = await countryAPI.data?.map((country) => {
+    const countryINFO = await countryAPI.data.map((country) => {
       return {
         name: country.name.common,
         id: country.cca3,
@@ -24,7 +24,6 @@ const getCountry = async () => {
     console.log(error);
   }
 };
-
 const getDbCountries = async (req, res) => {
   let allDbCountries = await getCountry(); //la info de la API, mapeada
   let { name } = req.query;
@@ -46,7 +45,7 @@ const getDbCountries = async (req, res) => {
       let countryName = await Country.findAll({
         where: {
           name: {
-            [Sequelize.Op.iLike]: `%${name.toLowerCase()}`,
+            [Sequelize.Op.iLike]: `%${name.toLowerCase()}%`,
           },
         },
       });
@@ -65,7 +64,8 @@ const getDbCountries = async (req, res) => {
     console.log(error);
   }
 };
-
+let er = getDbCountries("argentina");
+console.log(er);
 const getAllCountries = async () => {
   let apiINFO = await getCountry();
   let dbINFO = await getDbCountries();
@@ -89,7 +89,7 @@ router.get("/countries", async () => {
 });
 
 router.get("countries/:id", async () => {
-  const id = req.params.id;
+  const { id } = req.params;
   if (id) {
     let countryId = await await Country.findByPk(id.toUpperCase(), {
       include: {

@@ -27,7 +27,7 @@ export function getCountry(name) {
 export let getActivities = () => {
   return async (dispatch) => {
     try {
-      let activities = await axios.get("http://localhost:3001/activity");
+      let activities = await axios.get(`${BASE_URL}/activity`);
       return dispatch({
         type: "GET_ACTIVITIES",
         payload: activities.data,
