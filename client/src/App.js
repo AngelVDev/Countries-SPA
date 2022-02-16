@@ -12,8 +12,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route exact path="/home" component={Home} />
-          {/* <Route exact path="/countries?name=" /> */}
+          <Route exact path="/countries" component={Home} />
           <Route exact path="/countries/:id " component={Country} />
           <Route exact path="/activity" component={Activitor} />
         </Switch>

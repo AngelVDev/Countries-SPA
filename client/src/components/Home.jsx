@@ -1,5 +1,6 @@
-import { React, useEffect } from "react";
+import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import CountryCard from "./CountryCard";
 import {
   fetchCountries,
   getActivities,
@@ -9,42 +10,62 @@ import {
   filterContinent,
 } from "../store/actions";
 import { Link } from "react-router-dom";
-import Country from "./Country";
-import styled from "styled-components";
 import SearchBar from "./SearchBar";
+import Pagination from "./Pagination";
 
-export const Home = () => {
-  let countries = useSelector((state) => state.countries);
+const Home = () => {
   let dispatch = useDispatch();
-  let activities = useSelector((state) => state.activities);
-  useEffect(() => {
-    dispatch(fetchCountries());
-    dispatch(getActivities());
-  }, [dispatch]);
+  let { countries } = useSelector((state) => state);
+  let { activities } = useSelector((state) => state);
+
+  let [currentPage, setCurrentPage] = useState(1);
+  let [countriesPage, setCountriesPage] = useState(9);
+  let lastCountry = currentPage * countriesPage;
+  let indFirstCountry = lastCountry - countriesPage;
+  let currentCountries = countries.slice(indFirstCountry, lastCountry);
+
+  let pagination = (pageN) => {
+    if (pageN !== 1) {
+      setCountriesPage(10);
+      setCurrentPage(pageN);
+    } else {
+      setCountriesPage(9);
+      setCurrentPage(pageN);
+    }
+  };
+
   let handlefilterContinent = (e) => {
     e.preventDefault();
     dispatch(filterContinent(e.targetValue));
   };
+
   let handlefilterActivity = (e) => {
     e.preventDefault();
     dispatch(filterActivity(e.targetValue));
   };
+
   let handleName = (e) => {
     e.preventDefault();
     dispatch(orderByName(e.targetValue));
   };
+
   let handlePopulation = (e) => {
     e.preventDefault();
     dispatch(orderByPopulation(e.targetValue));
   };
+
+  useEffect(() => {
+    dispatch(fetchCountries());
+    dispatch(getActivities());
+  }, [dispatch]);
   return (
     <div>
       <h1>All the countries in THE WORLD</h1>
-      <SearchBar />
       <nav>
         <Link to="/activity">
           <button>Create an activity</button>
         </Link>
+        <SearchBar />
         <div>
           <label>Filter by continent:</label>
           <select onChange={handlefilterContinent}>
@@ -59,7 +80,7 @@ export const Home = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="">Filter by activity/ies</label>
+          <label>Filter by activity/ies</label>
           <select onChange={handlefilterActivity}>
             <option value="ALL">All</option>
             {activities &&
@@ -71,21 +92,41 @@ export const Home = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="">Order: name</label>
+          <label>Order: name</label>
           <select onChange={handleName}>
             <option value="ASC">¡A-Z!</option>
             <option value="DSC">¡Z-A!</option>
           </select>
         </div>
         <div>
-          <label htmlFor="">Order: population</label>
+          <label>Order: population</label>
           <select onChange={handlePopulation}>
             <option value="LOW">Low to high</option>
             <option value="HI">High to low</option>
           </select>
         </div>
       </nav>
-      <Country></Country>
+      <Pagination
+        countriesPage={countriesPage}
+        allCountries={countries.length}
+        pagination={pagination}
+      />
+      <div>
+        {currentCountries &&
+          currentCountries.map((c) => (
+            <CountryCard
+              key={c.id}
+              flag={c.flag}
+              continent={c.continent}
+              id={c.id}
+            />
+          ))}
+      </div>
+      <Pagination
+        countriesPage={countriesPage}
+        allCountries={countries.length}
+        pagination={pagination}
+      />
     </div>
   );
 };

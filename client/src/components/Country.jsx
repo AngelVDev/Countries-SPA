@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import styled from "styled-components";
 import { getCountry } from "../store/actions";
 
-export default function Country() {
+const Country = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { countryInfo } = useSelector((state) => state);
@@ -19,9 +18,7 @@ export default function Country() {
           <button>To Home</button>
         </Link>
       </nav>
-      {!countryInfo ? (
-        <h2>Loading...</h2>
-      ) : (
+      {countryInfo ? (
         <div key={countryInfo.id}>
           <div>
             <h2>Name:</h2> <p>{countryInfo.name ? countryInfo.name : null}</p>
@@ -62,7 +59,11 @@ export default function Country() {
             <img src={countryInfo.flag} alt={countryInfo.name} />
           </div>
         </div>
+      ) : (
+        <h2>Loading...</h2>
       )}
     </div>
   );
-}
+};
+
+export default Country;

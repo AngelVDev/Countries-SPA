@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getCountry } from "../store/actions/index";
+import { searchCountry } from "../store/actions/index";
 import { DIV } from "./Landing";
 const SearchBar = () => {
   let dispatch = useDispatch();
@@ -12,7 +12,7 @@ const SearchBar = () => {
   };
   let handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(getCountry(name));
+    dispatch(searchCountry(name));
   };
   return (
     <DIV>

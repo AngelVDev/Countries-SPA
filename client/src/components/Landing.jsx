@@ -6,7 +6,7 @@ export const Landing = () => {
   return (
     <DIV>
       <h2>Welcome to THE WORLD</h2>
-      <Link to="/home">
+      <Link to="/countries">
         <STYLO_BUTT>Start</STYLO_BUTT>
       </Link>
     </DIV>
@@ -14,45 +14,111 @@ export const Landing = () => {
 };
 export const DIV = styled.div`
   /* align: center; */
+  /* background: radial-gradient(#fed36d 0%, #e2b349 65%, #c38822 100%); */
+  background-image: url("https://cdn11.bigcommerce.com/s-nq6l4syi/images/stencil/1280x1280/products/12947/377035/43175-1024__60810.1641567725.jpg");
+  height: 100vh
   font-family: "Garamond", serif;
   font-smooth: subpixel-antialiased;
   text-align: center;
   color: white;
-  background: radial-gradient(#fed36d 0%, #e2b349 65%, #c38822 100%);
-  position: relative;
   border-radius: 32px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
 `;
 const STYLO_BUTT = styled.button`
-  color: white;
-  position: absolute;
-  outline: none;
-  top: 80%;
-  left: 50%;
-  background: #64b534;
-  border-radius: 5px;
-  &:hover {
-    box-shadow: 0px 1px 35px 10px #fed36d;
+  &::after {
+    padding: 16px 20px;
+    font-size: 18px;
+    background: linear-gradient(45deg, transparent 5%, #ff013c 5%);
+    border: 0;
+    color: #fff;
+    letter-spacing: 3px;
+    line-height: 1;
+    box-shadow: 6px 0px 0px #00e6f6;
+    outline: transparent;
+    position: relative;
   }
-  &:active {
-    filter: hue-rotate(77deg);
+  &::after {
+    --slice-0: inset(50% 50% 50% 50%);
+    --slice-1: inset(80% -6px 0 0);
+    --slice-2: inset(50% -6px 30% 0);
+    --slice-3: inset(10% -6px 85% 0);
+    --slice-4: inset(40% -6px 43% 0);
+    --slice-5: inset(80% -6px 5% 0);
+    content: "START";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      45deg,
+      transparent 3%,
+      #00e6f6 3%,
+      #00e6f6 5%,
+      #ff013c 5%
+    );
+    text-shadow: -3px -3px 0px #f8f005, 3px 3px 0px #00e6f6;
+    clip-path: var(--slice-0);
   }
-  &:focus {
-    animation: back 1350ms ease 0s 1 normal backwards;
+  &:hover&::after {
+    animation: 1s glitch;
+    animation-timing-function: steps(2, end);
   }
-  @keyframes back {
+
+  @keyframes glitch {
     0% {
-      opacity: 1;
-      transform: rotateX(0deg);
-      transform-origin: left;
+      clip-path: var(--slice-1);
+      transform: translate(-20px, -10px);
+    }
+
+    10% {
+      clip-path: var(--slice-3);
+      transform: translate(10px, 10px);
+    }
+
+    20% {
+      clip-path: var(--slice-1);
+      transform: translate(-10px, 10px);
+    }
+
+    30% {
+      clip-path: var(--slice-3);
+      transform: translate(0px, 5px);
+    }
+
+    40% {
+      clip-path: var(--slice-2);
+      transform: translate(-5px, 0px);
+    }
+
+    50% {
+      clip-path: var(--slice-3);
+      transform: translate(5px, 0px);
+    }
+
+    60% {
+      clip-path: var(--slice-4);
+      transform: translate(5px, 10px);
+    }
+
+    70% {
+      clip-path: var(--slice-2);
+      transform: translate(-10px, 10px);
+    }
+
+    80% {
+      clip-path: var(--slice-5);
+      transform: translate(20px, -10px);
+    }
+
+    90% {
+      clip-path: var(--slice-1);
+      transform: translate(-10px, 0px);
     }
 
     100% {
-      opacity: 0;
-      transform: rotateX(-100deg);
-      transform-origin: left;
+      clip-path: var(--slice-1);
+      transform: translate(0);
     }
   }
 `;

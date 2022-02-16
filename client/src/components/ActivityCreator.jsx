@@ -5,9 +5,9 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 const Activitor = () => {
-  const dispatch = useDispatch();
-  const { error, setError } = useState({});
-  const { input, setInput } = useState({
+  let dispatch = useDispatch();
+  let { error, setError } = useState({});
+  let { input, setInput } = useState({
     name: "",
     difficulty: "",
     duration: "",
@@ -77,13 +77,13 @@ const Activitor = () => {
               placeholder="Activity name"
               value={input.name}
               name="name"
-              onChange={handleOnChange}
+              onChange={(e) => handleOnChange(e)}
             />
             {error.name && <p>{error.name}</p>}
           </div>
           <div>
             <label>Difficulty:</label>
-            <select onChange={handleOnChange} name="difficulty">
+            <select onChange={(e) => handleOnChange(e)} name="difficulty">
               <option value="">-</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -91,11 +91,11 @@ const Activitor = () => {
               <option value="4">4</option>
               <option value="5">5</option>
             </select>
-            {error.dificulty && <p className="error">{error.dificulty}</p>}
+            {error.difficulty && <p className="error">{error.difficulty}</p>}
           </div>
           <div>
             <label>Duration:</label>
-            <select onChange={handleOnChange} name="duration">
+            <select onChange={(e) => handleOnChange(e)} name="duration">
               <option value="">-</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -107,7 +107,7 @@ const Activitor = () => {
           </div>
           <div>
             <label>Season:</label>
-            <select onChange={handleOnChange} name="season">
+            <select onChange={(e) => handleOnChange(e)} name="season">
               <option value="">-</option>
               <option value="Summer">Summer</option>
               <option value="Spring">Spring</option>
