@@ -15,9 +15,8 @@ export const Landing = () => {
 export const DIV = styled.div`
   /* align: center; */
   /* background: radial-gradient(#fed36d 0%, #e2b349 65%, #c38822 100%); */
-  background-image: url("https://cdn11.bigcommerce.com/s-nq6l4syi/images/stencil/1280x1280/products/12947/377035/43175-1024__60810.1641567725.jpg");
-  height: 100vh
-  font-family: "Garamond", serif;
+  /* background-image: url("https://cdn11.bigcommerce.com/s-nq6l4syi/images/stencil/1280x1280/products/12947/377035/43175-1024__60810.1641567725.jpg"); */
+  font-family: "Garamond", serif, 7rem;
   font-smooth: subpixel-antialiased;
   text-align: center;
   color: white;

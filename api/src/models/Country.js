@@ -13,11 +13,7 @@ module.exports = (sequelize) => {
       allowNull: false,
       primaryKey: true,
     },
-    flags: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    capital: {
+    flag: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -25,18 +21,23 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    area: {
+    capital: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    subregion: {
+      type: DataTypes.STRING,
+    },
+    area: {
+      type: DataTypes.STRING,
+    },
     population: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
-    created: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
-    },
+    // created: {
+    //   type: DataTypes.BOOLEAN,
+    //   allowNull: false,
+    //   defaultValue: true,
+    // },
   });
 };
