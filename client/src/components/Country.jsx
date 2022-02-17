@@ -18,7 +18,7 @@ const Country = () => {
           <button>To Home</button>
         </Link>
       </nav>
-      {countryInfo ? (
+      <div>
         <div key={countryInfo.id}>
           <div>
             <h2>Name:</h2> <p>{countryInfo.name ? countryInfo.name : null}</p>
@@ -52,16 +52,14 @@ const Country = () => {
             <p>
               {countryInfo.activities
                 ? countryInfo.activities.map((a) => a.name).join(", ")
-                : "No hay actividades"}
+                : "There's no activities"}
             </p>
           </div>
           <div>
             <img src={countryInfo.flag} alt={countryInfo.name} />
           </div>
         </div>
-      ) : (
-        <h2>Loading...</h2>
-      )}
+      </div>
     </div>
   );
 };

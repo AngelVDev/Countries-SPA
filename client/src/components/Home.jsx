@@ -11,28 +11,55 @@ import {
 } from "../store/actions";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
-import Pagination from "./Pagination";
+import gotFetched from "./Pagination";
+import { DIV } from "./Landing";
+import styled from "styled-components";
+import { Loading } from "./Loading";
 
 const Home = () => {
-  let dispatch = useDispatch();
-  let { countries } = useSelector((state) => state);
-  let { activities } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const { countries } = useSelector((state) => state);
+  const { activities } = useSelector((state) => state);
+  // <-------INFINITY SCROLL ------->
+  const [page, setPage] = useState(1);
+  const [fetched, setFetched] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  let [currentPage, setCurrentPage] = useState(1);
-  let [countriesPage, setCountriesPage] = useState(9);
-  let lastCountry = currentPage * countriesPage;
-  let indFirstCountry = lastCountry - countriesPage;
-  let currentCountries = countries.slice(indFirstCountry, lastCountry);
-
-  let pagination = (pageN) => {
-    if (pageN !== 1) {
-      setCountriesPage(10);
-      setCurrentPage(pageN);
-    } else {
-      setCountriesPage(9);
-      setCurrentPage(pageN);
+  const handleScroll = (event) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+    // console.log("scrollTop:", scrollTop);
+    // console.log("clientHeight", clientHeight);
+    // console.log("scrollHeight", scrollHeight);
+    if (scrollHeight - scrollTop === clientHeight) {
+      setPage((prev) => prev + 1);
     }
   };
+
+  useEffect(() => {
+    const loadFetched = async () => {
+      setLoading(true);
+      const newFetch = await gotFetched(page);
+      setFetched((prev) => [...prev, ...newFetch]);
+      setLoading(false);
+    };
+    loadFetched();
+  }, [page]);
+  // <-------INFINITY SCROLL ------->
+  // let [currentPage, setCurrentPage] = useState(1);
+  // let [countriesPage, setCountriesPage] = useState(9);
+  // let lastCountry = currentPage * countriesPage;
+  // let indFirstCountry = lastCountry - countriesPage;
+  // let currentCountries = countries.slice(indFirstCountry, lastCountry);
+
+  // let pagination = (pageN) => {
+  //   if (pageN !== 1) {
+  //     setCountriesPage(10);
+  //     setCurrentPage(pageN);
+  //   } else {
+  //     setCountriesPage(9);
+  //     setCurrentPage(pageN);
+  //   }
+  // };
 
   let handlefilterContinent = (e) => {
     e.preventDefault();
@@ -59,16 +86,16 @@ const Home = () => {
     dispatch(getActivities());
   }, [dispatch]);
   return (
-    <div>
-      <h1>All the countries in THE WORLD</h1>
+    <DIV>
+      <h1>Countries of THE WORLD</h1>
       <nav>
         <Link to="/activity">
           <button>Create an activity</button>
         </Link>
         <SearchBar />
         <div>
-          <label>Filter by continent:</label>
-          <select onChange={handlefilterContinent}>
+          <label>Filter by continent: </label>
+          <Select onChange={handlefilterContinent}>
             <option value="All">All</option>
             <option value="Africa">Africa</option>
             <option value="North America">North America</option>
@@ -77,11 +104,11 @@ const Home = () => {
             <option value="Asia">Asia</option>
             <option value="Europe">Europe</option>
             <option value="Oceania">Oceania</option>
-          </select>
+          </Select>
         </div>
         <div>
-          <label>Filter by activity/ies</label>
-          <select onChange={handlefilterActivity}>
+          <label>Filter by activity/ies: </label>
+          <Select onChange={handlefilterActivity}>
             <option value="ALL">All</option>
             {activities &&
               activities.map((a) => (
@@ -89,46 +116,40 @@ const Home = () => {
                   {a.name}
                 </option>
               ))}
-          </select>
+          </Select>
         </div>
         <div>
-          <label>Order: name</label>
-          <select onChange={handleName}>
+          <label>Sort by name: </label>
+          <Select onChange={handleName}>
             <option value="ASC">¡A-Z!</option>
             <option value="DSC">¡Z-A!</option>
-          </select>
+          </Select>
         </div>
         <div>
-          <label>Order: population</label>
-          <select onChange={handlePopulation}>
+          <label>Sort by population: </label>
+          <Select onChange={handlePopulation}>
             <option value="LOW">Low to high</option>
             <option value="HI">High to low</option>
-          </select>
+          </Select>
         </div>
       </nav>
-      <Pagination
-        countriesPage={countriesPage}
-        allCountries={countries.length}
-        pagination={pagination}
-      />
-      <div>
-        {currentCountries &&
-          currentCountries.map((c) => (
-            <CountryCard
-              key={c.id}
-              flag={c.flag}
-              continent={c.continent}
-              id={c.id}
-            />
+      <DIV onScroll={handleScroll}>
+        {fetched &&
+          fetched.map((fetchx) => (
+            <CountryCard key={fetched.cell} fetched={fetchx} />
           ))}
-      </div>
-      <Pagination
-        countriesPage={countriesPage}
-        allCountries={countries.length}
-        pagination={pagination}
-      />
-    </div>
+      </DIV>
+      {loading && <Loading>Loading...</Loading>}
+    </DIV>
   );
 };
+export const Select = styled.select`
+  background-color: #e26c6c;
+  color: white;
+  outline: 2px dashed #ffb12e;
+  outline-offset: 2px;
+  font-family: "Alegreya Sans SC";
+  font-weight: bold;
+`;
 
 export default Home;

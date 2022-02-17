@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { Country, Activity } = require("../db");
+const { Country, Activity, CountryActivity } = require("../db");
 
 const getDbInfoActivities = async (req, res, next) => {
   try {
@@ -31,9 +31,9 @@ const createActivity = async (req, res, _next) => {
       });
       await newActivity.addCountry(activityCountry);
     });
-    return res.send("SUCCESS");
+    if (newActivity.length !== {}) return res.send("SUCCESS");
   } catch (error) {
-    console.log(error);
+    console.log("Ah, pero qué bien lo tuyo, eh...");
     res.status(500).send("No such thing as 'SUCCESS' ");
   }
 };

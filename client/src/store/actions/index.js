@@ -1,13 +1,12 @@
 import axios from "axios";
 const BASE_URL = "http://localhost:3001";
-export const FETCH_COUNTRIES = "FETCH_COUNTRIES";
 
 export function fetchCountries() {
   return (dispatch) => {
     axios
-      .get("http://localhost:3001/countries")
+      .get(BASE_URL + "/countries")
       .then((response) => {
-        dispatch({ type: FETCH_COUNTRIES, payload: response.data });
+        dispatch({ type: "FETCH_COUNTRIES", payload: response.data });
       })
       .catch((err) => console.log(err));
   };
@@ -17,7 +16,9 @@ export function getCountry(name) {
     return fetch(`${BASE_URL}/countries/${name}`)
       .then((response) => response.json())
       .then((detail) => {
-        dispatch({ type: "GET_COUNTRY", payload: detail.data });
+        dispatch({ type: "GET_COUNTRY", payload: detail.data }).catch((error) =>
+          console.log(error)
+        );
       });
   };
 }

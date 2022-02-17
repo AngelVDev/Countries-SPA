@@ -1,13 +1,16 @@
-import { React, useEffect, useState } from "react";
+import { React, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { createActivity, fetchCountries } from "../store/actions";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { DIV } from "./Landing";
+import { Select } from "./Home";
+import { INPUT } from "./SearchBar";
 
 const Activitor = () => {
   let dispatch = useDispatch();
-  let { error, setError } = useState({});
-  let { input, setInput } = useState({
+  let { countries } = useSelector((state) => state);
+  let [error, setError] = useState({});
+  let [input, setInput] = useState({
     name: "",
     difficulty: "",
     duration: "",
@@ -17,10 +20,15 @@ const Activitor = () => {
 
   let validate = () => {
     let error = {};
-    if (!input.name) error.name = "Name required";
-    else if (!input.difficulty) error.difficulty = "Set difficulty, please";
-    else if (!input.duration) error.duration = "Select a duration, I beg you";
-    else if (!input.season) error.season = "季節を選んでください";
+    if (!input.name) {
+      error.name = "Name required";
+    } else if (!input.difficulty) {
+      error.difficulty = "Set difficulty, please";
+    } else if (!input.duration) {
+      error.duration = "Select a duration, I beg you";
+    } else if (!input.season) {
+      error.season = "季節を選んでください";
+    }
     return error;
   };
 
@@ -36,6 +44,14 @@ const Activitor = () => {
       })
     );
   };
+  let handleCheckbox = (e) => {
+    if (e.target.checked) {
+      setInput({
+        ...input,
+        countries: [...input.countries, e.target.value],
+      });
+    }
+  };
   let handleOnSubmit = (e) => {
     e.preventDefault();
     dispatch(createActivity(input));
@@ -48,20 +64,12 @@ const Activitor = () => {
     });
     alert("¡Successful creation!");
   };
-  let handleCheckbox = (e) => {
-    if (e.target.checked) {
-      setInput({
-        ...input,
-        countries: [...input.countries, e.target.value],
-      });
-    }
-  };
   useEffect(() => {
     dispatch(fetchCountries());
   }, [dispatch]);
 
   return (
-    <div>
+    <DIV>
       <h1>Create a turistic activity</h1>
       <nav>
         <Link to="/countries">
@@ -72,7 +80,7 @@ const Activitor = () => {
         <div>
           <div>
             <label>Activity:</label>
-            <input
+            <INPUT
               type="text"
               placeholder="Activity name"
               value={input.name}
@@ -83,37 +91,37 @@ const Activitor = () => {
           </div>
           <div>
             <label>Difficulty:</label>
-            <select onChange={(e) => handleOnChange(e)} name="difficulty">
+            <Select onChange={(e) => handleOnChange(e)} name="difficulty">
               <option value="">-</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
-            </select>
+            </Select>
             {error.difficulty && <p className="error">{error.difficulty}</p>}
           </div>
           <div>
             <label>Duration:</label>
-            <select onChange={(e) => handleOnChange(e)} name="duration">
+            <Select onChange={(e) => handleOnChange(e)} name="duration">
               <option value="">-</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
-            </select>
+            </Select>
             {error.duration && <p>{error.duration}</p>}
           </div>
           <div>
             <label>Season:</label>
-            <select onChange={(e) => handleOnChange(e)} name="season">
+            <Select onChange={(e) => handleOnChange(e)} name="season">
               <option value="">-</option>
               <option value="Summer">Summer</option>
               <option value="Spring">Spring</option>
               <option value="Autumn">Autumn</option>
               <option value="Winter">Winter</option>
-            </select>
+            </Select>
             {error.season && <p>{error.season}</p>}
           </div>
           <div>
@@ -137,7 +145,7 @@ const Activitor = () => {
         </div>
         <button type="submit">CREATE</button>
       </form>
-    </div>
+    </DIV>
   );
 };
 

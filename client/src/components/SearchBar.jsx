@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
 import { searchCountry } from "../store/actions/index";
 import { DIV } from "./Landing";
 const SearchBar = () => {
@@ -16,7 +17,7 @@ const SearchBar = () => {
   };
   return (
     <DIV>
-      <input
+      <INPUT
         type="text"
         placeholder="Search smthng..."
         onChange={(e) => handleInputChange(e)}
@@ -27,4 +28,12 @@ const SearchBar = () => {
     </DIV>
   );
 };
+export const INPUT = styled.input`
+  font-family: "Alegreya Sans SC";
+  font-weight: bold;
+  background-color: #ffb12e;
+  color: white;
+  outline: 2px dashed #00e6f6;
+  outline-offset: 5px;
+`;
 export default SearchBar;
