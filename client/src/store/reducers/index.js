@@ -3,7 +3,7 @@ const initialState = {
   activities: [],
   countryDetail: [],
 };
-
+//..
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case "FETCH_COUNTRIES":
